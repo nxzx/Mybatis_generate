@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.migu.spms.dao.inf.ITalentJudgeDao">
+    <!-- 所有查询列 -->
+    <sql id="QUERY_COLUMN_LIST">
+        id AS id, user_id AS userId, employee_num AS employeeNum, company_id AS companyId, department_id AS departmentId, type AS type, group_id AS groupId, sequence_id AS sequenceId, post_id AS postId, grade_id AS gradeId, status AS status, create_user_id AS createUserId, create_date AS createDate, modify_user_id AS modifyUserId, modify_date AS modifyDate, company_name AS companyName, department_name AS departmentName, group_name AS groupName, sequence_name AS sequenceName, post_name AS postName, band AS band, name AS name
+    </sql>
+    
+	<!-- 查询列来源表 -->
+    <sql id="QUERY_FROM_TABLE">
+        FROM talent_judge
+    </sql>
+    
+	<!-- 全部条件(更多功能可以通过queryData扩展实现) -->
+    <sql id="QUERY_WHERE_CLAUSE">
+        <where>
+			<if test="null != id"><![CDATA[AND id = #{id}]]></if>
+			<if test="null != userId"><![CDATA[AND user_id = #{userId}]]></if>
+			<if test="null != employeeNum and '' != employeeNum"><![CDATA[AND employee_num = #{employeeNum}]]></if>
+			<if test="null != companyId"><![CDATA[AND company_id = #{companyId}]]></if>
+			<if test="null != departmentId"><![CDATA[AND department_id = #{departmentId}]]></if>
+			<if test="null != type"><![CDATA[AND type = #{type}]]></if>
+			<if test="null != groupId"><![CDATA[AND group_id = #{groupId}]]></if>
+			<if test="null != sequenceId"><![CDATA[AND sequence_id = #{sequenceId}]]></if>
+			<if test="null != postId"><![CDATA[AND post_id = #{postId}]]></if>
+			<if test="null != gradeId"><![CDATA[AND grade_id = #{gradeId}]]></if>
+			<if test="null != status"><![CDATA[AND status = #{status}]]></if>
+			<if test="null != createUserId"><![CDATA[AND create_user_id = #{createUserId}]]></if>
+			<if test="null != createDate and '' != createDate"><![CDATA[AND create_date = #{createDate}]]></if>
+			<if test="null != modifyUserId"><![CDATA[AND modify_user_id = #{modifyUserId}]]></if>
+			<if test="null != modifyDate and '' != modifyDate"><![CDATA[AND modify_date = #{modifyDate}]]></if>
+			<if test="null != companyName and '' != companyName"><![CDATA[AND company_name = #{companyName}]]></if>
+			<if test="null != departmentName and '' != departmentName"><![CDATA[AND department_name = #{departmentName}]]></if>
+			<if test="null != groupName and '' != groupName"><![CDATA[AND group_name = #{groupName}]]></if>
+			<if test="null != sequenceName and '' != sequenceName"><![CDATA[AND sequence_name = #{sequenceName}]]></if>
+			<if test="null != postName and '' != postName"><![CDATA[AND post_name = #{postName}]]></if>
+			<if test="null != band and '' != band"><![CDATA[AND band = #{band}]]></if>
+			<if test="null != name and '' != name"><![CDATA[AND name = #{name}]]></if>
+		</where>
+    </sql>
+    
+	<!-- 排序与分页 -->
+    <sql id="QUERY_ORDER_LIMIT_CONDITION">
+        <if test="null != sortFields and '' != sortFields"><![CDATA[ORDER BY ${sortFields}]]></if>
+		<if test="null != rowSrt and rowSrt &gt;= 0 and null != pageSize and pageSize &gt; 0"><![CDATA[LIMIT #{rowSrt}, #{pageSize}]]></if>
+    </sql>
+    
+	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+    <sql id="UPDATE_COLUMN_SET">
+        <set>
+			<if test="null != userId"><![CDATA[user_id = #{userId},]]></if>
+			<if test="null != employeeNum"><![CDATA[employee_num = #{employeeNum},]]></if>
+			<if test="null != companyId"><![CDATA[company_id = #{companyId},]]></if>
+			<if test="null != departmentId"><![CDATA[department_id = #{departmentId},]]></if>
+			<if test="null != type"><![CDATA[type = #{type},]]></if>
+			<if test="null != groupId"><![CDATA[group_id = #{groupId},]]></if>
+			<if test="null != sequenceId"><![CDATA[sequence_id = #{sequenceId},]]></if>
+			<if test="null != postId"><![CDATA[post_id = #{postId},]]></if>
+			<if test="null != gradeId"><![CDATA[grade_id = #{gradeId},]]></if>
+			<if test="null != status"><![CDATA[status = #{status},]]></if>
+			<if test="null != createUserId"><![CDATA[create_user_id = #{createUserId},]]></if>
+			<if test="null != createDate"><![CDATA[create_date = #{createDate},]]></if>
+			<if test="null != modifyUserId"><![CDATA[modify_user_id = #{modifyUserId},]]></if>
+			<if test="null != modifyDate"><![CDATA[modify_date = #{modifyDate},]]></if>
+			<if test="null != companyName"><![CDATA[company_name = #{companyName},]]></if>
+			<if test="null != departmentName"><![CDATA[department_name = #{departmentName},]]></if>
+			<if test="null != groupName"><![CDATA[group_name = #{groupName},]]></if>
+			<if test="null != sequenceName"><![CDATA[sequence_name = #{sequenceName},]]></if>
+			<if test="null != postName"><![CDATA[post_name = #{postName},]]></if>
+			<if test="null != band"><![CDATA[band = #{band},]]></if>
+			<if test="null != name"><![CDATA[name = #{name},]]></if>
+		</set>
+    </sql>
+    
+	<!-- 保存记录 -->
+    <insert id="save" keyProperty="id" parameterType="com.migu.spms.dao.entity.talentJudgeDO" useGeneratedKeys="true">
+        INSERT INTO talent_judge
+		(
+		id,
+		user_id,
+		employee_num,
+		company_id,
+		department_id,
+		type,
+		group_id,
+		sequence_id,
+		post_id,
+		grade_id,
+		status,
+		create_user_id,
+		create_date,
+		modify_user_id,
+		modify_date,
+		company_name,
+		department_name,
+		group_name,
+		sequence_name,
+		post_name,
+		band,
+		name
+		) 
+		VALUES
+		(
+		#{id},
+		#{userId},
+		#{employeeNum},
+		#{companyId},
+		#{departmentId},
+		#{type},
+		#{groupId},
+		#{sequenceId},
+		#{postId},
+		#{gradeId},
+		#{status},
+		#{createUserId},
+		#{createDate},
+		#{modifyUserId},
+		#{modifyDate},
+		#{companyName},
+		#{departmentName},
+		#{groupName},
+		#{sequenceName},
+		#{postName},
+		#{band},
+		#{name}
+		)
+    </insert>
+    
+	<!-- 批量保存记录 -->
+    <insert id="batchSave" parameterType="java.util.List">
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO talent_judge
+		(
+		id,
+		user_id,
+		employee_num,
+		company_id,
+		department_id,
+		type,
+		group_id,
+		sequence_id,
+		post_id,
+		grade_id,
+		status,
+		create_user_id,
+		create_date,
+		modify_user_id,
+		modify_date,
+		company_name,
+		department_name,
+		group_name,
+		sequence_name,
+		post_name,
+		band,
+		name
+		) 
+		VALUES
+		<foreach collection="list" index="index" item="item" open="" separator="," close="">
+		(
+		#{item.id},
+		#{item.userId},
+		#{item.employeeNum},
+		#{item.companyId},
+		#{item.departmentId},
+		#{item.type},
+		#{item.groupId},
+		#{item.sequenceId},
+		#{item.postId},
+		#{item.gradeId},
+		#{item.status},
+		#{item.createUserId},
+		#{item.createDate},
+		#{item.modifyUserId},
+		#{item.modifyDate},
+		#{item.companyName},
+		#{item.departmentName},
+		#{item.groupName},
+		#{item.sequenceName},
+		#{item.postName},
+		#{item.band},
+		#{item.name}
+		)
+		</foreach>
+    </insert>
+    
+	<!-- 修改记录通过主键 -->
+    <update id="updateByKey" parameterType="com.migu.spms.dao.entity.talentJudgeDO">
+        <![CDATA[UPDATE talent_judge]]>
+		<include refid="UPDATE_COLUMN_SET"/>
+		<![CDATA[WHERE id = #{id}]]>
+    </update>
+    
+	<!-- 删除,通过条件 -->
+    <delete id="deleteByCondition" parameterType="com.migu.spms.dao.entity.talentJudgeCriteria">
+        <![CDATA[DELETE]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+    </delete>
+    
+	<!-- 查询,通过主键 -->
+    <select id="selectByKey" parameterType="java.lang.Integer" resultType="com.migu.spms.dao.entity.talentJudgeDO">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<![CDATA[WHERE id = #{id}]]>
+    </select>
+    
+	<!-- 查询,通过条件 -->
+    <select id="selectList" parameterType="com.migu.spms.dao.entity.talentJudgeCriteria" resultType="com.migu.spms.dao.entity.talentJudgeDO">
+        <![CDATA[SELECT]]>
+		<include refid="QUERY_COLUMN_LIST"/>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+		<include refid="QUERY_ORDER_LIMIT_CONDITION"/>
+    </select>
+    
+	<!-- 查询总数,通过条件 -->
+    <select id="selectListCount" parameterType="com.migu.spms.dao.entity.talentJudgeCriteria" resultType="java.lang.Integer">
+        <![CDATA[SELECT COUNT(*)]]>
+		<include refid="QUERY_FROM_TABLE"/>
+		<include refid="QUERY_WHERE_CLAUSE"/>
+    </select>
+    
+	<!-- 其它SQL语句 -->
+
+</mapper>
